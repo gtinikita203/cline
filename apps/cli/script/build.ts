@@ -161,10 +161,13 @@ function findOpenTuiParserWorker(): string {
 }
 
 function getBunTarget(
-	item: (typeof allTargets)[number],
+    item: (typeof allTargets)[number],
 ): Bun.Build.CompileTarget {
-	const targetOs = item.os === "win32" ? "windows" : item.os;
-	return `bun-${targetOs}-${item.arch}` as Bun.Build.CompileTarget;
+    const targetOs = item.os === "win32" ? "windows" : item.os;
+    if (targetOs === "linux" && item.arch === "x64") {
+        return "bun-linux-x64-baseline" as Bun.Build.CompileTarget;
+    }
+    return `bun-${targetOs}-${item.arch}` as Bun.Build.CompileTarget;
 }
 
 async function buildCompiledBinary(input: {
